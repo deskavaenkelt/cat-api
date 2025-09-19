@@ -1,0 +1,96 @@
+###
+GET http://localhost:8080/cats
+
+###
+POST http://localhost:8080/cats
+Content-Type: application/json
+
+{
+  "name": "Mittens",
+  "breed": "Tabby"
+}
+
+###
+POST http://localhost:8080/cats/addPredefinedCats
+Content-Type: application/json
+
+###
+GET http://localhost:8080/cats/1
+
+###
+
+###
+PUT http://localhost:8080/cats/1
+Content-Type: application/json
+
+{
+  "name": "Mittens",
+  "breed": "Tabby"
+}
+
+###
+DELETE http://localhost:8080/cats/1
+
+### SignUp
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "email": "marcus@example.com",
+  "password": "SomethingSecure",
+  "fullName": "Marcus Medina"
+}
+
+### Login
+
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "marcus@example.com",
+  "password": "SomethingSecure"
+}
+
+### Efter login kopiera token och använd i Authorization header
+### Markera eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJjdXNAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTYyMTU0NjYsImV4cCI6MTcxNjIxOTA2Nn0.OkNAb4MZPuK83dx3cPQ6sUQqrwybFHVNwqFj6KazI7s och tryck CTRL + F, CTRL + R, TAB, CTRL + V
+### och skriv in ditt token, ALT+A
+
+### GET Cats
+GET http://localhost:8080/cats
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJjdXNAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTYyMTU0NjYsImV4cCI6MTcxNjIxOTA2Nn0.OkNAb4MZPuK83dx3cPQ6sUQqrwybFHVNwqFj6KazI7s
+
+### POST Store predefined cats
+POST http://localhost:8080/cats/addPredefinedCats
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJjdXNAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTYyMTU0NjYsImV4cCI6MTcxNjIxOTA2Nn0.OkNAb4MZPuK83dx3cPQ6sUQqrwybFHVNwqFj6KazI7s
+
+### GET Cat by ID
+GET http://localhost:8080/cats/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJjdXNAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTYyMTU0NjYsImV4cCI6MTcxNjIxOTA2Nn0.OkNAb4MZPuK83dx3cPQ6sUQqrwybFHVNwqFj6KazI7s
+
+### POST Cat
+POST http://localhost:8080/cats
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJjdXNAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTYyMTU0NjYsImV4cCI6MTcxNjIxOTA2Nn0.OkNAb4MZPuK83dx3cPQ6sUQqrwybFHVNwqFj6KazI7s
+
+{
+  "name": "Mittens",
+  "breed": "Tabby"
+}
+
+### PUT Cat
+PUT http://localhost:8080/cats/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJjdXNAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTYyMTU0NjYsImV4cCI6MTcxNjIxOTA2Nn0.OkNAb4MZPuK83dx3cPQ6sUQqrwybFHVNwqFj6KazI7s
+
+{
+  "name": "Mittens",
+  "breed": "Shabby"
+}
+
+### DELETE Cat
+DELETE http://localhost:8080/cats/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXJjdXNAZXhhbXBsZS5jb20iLCJpYXQiOjE3MTYyMTU0NjYsImV4cCI6MTcxNjIxOTA2Nn0.OkNAb4MZPuK83dx3cPQ6sUQqrwybFHVNwqFj6KazI7s
