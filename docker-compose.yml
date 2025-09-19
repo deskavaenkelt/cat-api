@@ -1,0 +1,37 @@
+services:
+  backend:
+    build:
+      context: ./cat_mvc_auth_swagger_lomboc
+      dockerfile: Dockerfile
+    container_name: cat-api-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+      - SERVER_PORT=8080
+    networks:
+      - cat-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/actuator/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  frontend:
+    build:
+      context: ./cat_mvc_frontend
+      dockerfile: Dockerfile
+    container_name: cat-api-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - cat-network
+    environment:
+      - REACT_APP_API_URL=http://backend:8080
+
+networks:
+  cat-network:
+    driver: bridge
