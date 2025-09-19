@@ -39,6 +39,11 @@ echo "6. Check if docker is running"
 docker run hello-world
 
 echo
-echo "7. Check if docker compose is running"
+echo "7. Install docker compose"
+sudo apt install docker-compose -y
+
+echo
+echo "8. Check if docker compose is running"
 docker compose version
+
 
