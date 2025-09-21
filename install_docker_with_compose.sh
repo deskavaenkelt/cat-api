@@ -1,49 +1,66 @@
 #!/bin/bash
 
-echo
-echo "1. Uninstall anyting docker"
-sudo apt-get remove docker docker-engine docker.io containerd runc -y
-for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+# Docker installation script för Azure Ubuntu VM
+# Detta script installerar Docker och Docker Compose på en Ubuntu-baserad Azure VM
 
-echo
-echo "2. Update apt"
-sudo apt-get update
+echo "=== Docker Installation Script för Azure VM ==="
+echo ""
 
-echo
-echo "3. Install docker from offical docker site"
-echo "3.1. Add Docker's official GPG key:"
-sudo apt-get update
-sudo apt-get install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
+# Uppdatera paketlistan
+echo "Steg 1: Uppdaterar paketlistan..."
+sudo apt-get update -y
 
-echo
-echo "3.2. Add the repository to Apt sources:"
+# Installera nödvändiga paket
+echo "Steg 2: Installerar nödvändiga paket..."
+sudo apt-get install -y \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
+# Lägg till Dockers officiella GPG-nyckel
+echo "Steg 3: Lägger till Dockers GPG-nyckel..."
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+# Lägg till Docker repository
+echo "Steg 4: Lägger till Docker repository..."
 echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-echo
-echo "4. Install docker"
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+# Uppdatera paketlistan igen
+echo "Steg 5: Uppdaterar paketlistan med Docker repository..."
+sudo apt-get update -y
 
-echo
-echo "5. Add user to docker group"
+# Installera Docker Engine
+echo "Steg 6: Installerar Docker Engine..."
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Installera standalone Docker Compose (för docker-compose kommandot)
+echo "Steg 7: Installerar Docker Compose..."
+DOCKER_COMPOSE_VERSION="2.23.3"
+sudo curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+# Lägg till användaren i docker-gruppen
+echo "Steg 8: Lägger till användaren i docker-gruppen..."
 sudo usermod -aG docker $USER
 
-echo
-echo "6. Check if docker is running"
-docker run hello-world
+# Verifiera installation
+echo ""
+echo "=== Verifierar installation ==="
+docker --version
+docker-compose --version
 
-echo
-echo "7. Install docker compose"
-sudo apt install docker-compose -y
-
-echo
-echo "8. Check if docker compose is running"
-docker compose version
-
-
+echo ""
+echo "=== Installation klar! ==="
+echo ""
+echo "VIKTIGT: Du måste logga ut och in igen för att gruppändringen ska träda i kraft."
+echo ""
+echo "Efter utloggning, kör följande kommandon för att starta Cat API:"
+echo "  git clone <repository-url>"
+echo "  cd cat-api"
+echo "  docker-compose up -d --build"
+echo ""
+echo "För att logga ut, kör: exit"
