@@ -11,12 +11,6 @@ services:
       - SERVER_PORT=8080
     networks:
       - cat-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/h2-console", "||", "exit", "1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 90s
 
   frontend:
     build:
