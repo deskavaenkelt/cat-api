@@ -17,6 +17,9 @@ RUN mvn clean package -DskipTests
 # Stage 2: Runtime stage
 FROM amazoncorretto:21-alpine
 
+# Install curl for healthcheck
+RUN apk add --no-cache curl
+
 # Set working directory
 WORKDIR /app
 
